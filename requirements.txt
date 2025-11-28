@@ -1,0 +1,22 @@
+# Core ML & Data Science
+tensorflow>=2.11.0
+opencv-python
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+
+# Image/Video Processing
+Pillow
+imutils
+
+# Model Deployment & Dashboard
+streamlit
+streamlit-webrtc  # For real-time video in Streamlit
+
+# Utilities
+jupyter
+tqdm
+ultralytics
+plotly
