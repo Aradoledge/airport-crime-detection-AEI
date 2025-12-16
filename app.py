@@ -13,6 +13,11 @@ from plotly.subplots import make_subplots
 import threading
 from collections import deque
 import time
+import logging
+
+# Suppress WebRTC and asyncio logging to reduce error noise
+logging.getLogger("aioice").setLevel(logging.ERROR)
+logging.getLogger("asyncio").setLevel(logging.ERROR)
 
 # Set page config
 st.set_page_config(
@@ -223,7 +228,7 @@ class VideoProcessor(VideoProcessorBase):
             h_err, w_err = annotated_img.shape[:2]
             cv2.putText(
                 annotated_img,
-                f"Processing Error: {str(e)}",
+                f"Processing Error: {str(e)[:50]}...",
                 (20, 30),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 0.5,
@@ -298,13 +303,17 @@ with col1:
     if not st.session_state.system_status["anomaly_model_loaded"]:
         st.warning("⚠️ Anomaly model not loaded. Anomaly detection will be limited.")
 
-    # WebRTC streamer
+    # WebRTC streamer with empty configuration to avoid STUN errors
     webrtc_ctx = webrtc_streamer(
         key="airport-security",
         video_processor_factory=VideoProcessor,
-        rtc_configuration=RTCConfiguration({}),
-        media_stream_constraints={"video": True, "audio": False},
+        rtc_configuration=RTCConfiguration({}),  # Empty config to prevent STUN errors
+        media_stream_constraints={
+            "video": {"width": {"ideal": 640}, "height": {"ideal": 480}},
+            "audio": False,
+        },
         desired_playing_state=True,
+        async_processing=True,
     )
 
     # Display current detection info below the video
@@ -350,7 +359,7 @@ with col1:
     else:
         st.session_state.system_status["camera_active"] = False
         st.info(
-            "🔴 Camera feed not active. Please allow camera access and start the stream."
+            "🔴 Camera feed not active. Please allow camera access and click 'START' to begin streaming."
         )
 
 with col2:
