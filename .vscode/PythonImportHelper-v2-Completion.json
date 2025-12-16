@@ -729,6 +729,15 @@
         "documentation": {}
     },
     {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
         "label": "classification_report",
         "importPath": "sklearn.metrics",
         "description": "sklearn.metrics",
