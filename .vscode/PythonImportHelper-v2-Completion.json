@@ -662,14 +662,6 @@
         "documentation": {}
     },
     {
-        "label": "RTCConfiguration",
-        "importPath": "streamlit_webrtc",
-        "description": "streamlit_webrtc",
-        "isExtraImport": true,
-        "detail": "streamlit_webrtc",
-        "documentation": {}
-    },
-    {
         "label": "av",
         "kind": 6,
         "isExtraImport": true,
@@ -4520,6 +4512,24 @@
         "importPath": "app",
         "description": "app",
         "peekOfCode": "def load_detectors():\n    \"\"\"Load detectors with error handling\"\"\"\n    try:\n        yolo_detector = YOLODetector()\n        st.session_state.system_status[\"yolo_loaded\"] = True\n    except Exception as e:\n        st.error(f\"YOLO Detector failed to load: {e}\")\n        yolo_detector = None\n    try:\n        anomaly_detector = AnomalyDetector()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "os.environ[\"STREAMLIT_WEBRTC_DEBUG\"]",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "os.environ[\"STREAMLIT_WEBRTC_DEBUG\"] = \"false\"\nos.environ[\"WEBRTC_DEBUG\"] = \"false\"\n# Set logging to suppress WebRTC warnings\nlogging.getLogger(\"aioice\").setLevel(logging.ERROR)\nlogging.getLogger(\"asyncio\").setLevel(logging.ERROR)\nlogging.getLogger(\"aiortc\").setLevel(logging.ERROR)\n# ============================================\n# Set page config\nst.set_page_config(\n    page_title=\"AI Airport Security System\",",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "os.environ[\"WEBRTC_DEBUG\"]",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "os.environ[\"WEBRTC_DEBUG\"] = \"false\"\n# Set logging to suppress WebRTC warnings\nlogging.getLogger(\"aioice\").setLevel(logging.ERROR)\nlogging.getLogger(\"asyncio\").setLevel(logging.ERROR)\nlogging.getLogger(\"aiortc\").setLevel(logging.ERROR)\n# ============================================\n# Set page config\nst.set_page_config(\n    page_title=\"AI Airport Security System\",\n    page_icon=\"🛡️\",",
         "detail": "app",
         "documentation": {}
     },

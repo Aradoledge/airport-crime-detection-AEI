@@ -1,7 +1,7 @@
 import streamlit as st
 import cv2
 import numpy as np
-from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 import av
 from src.detection.yolo_detector import YOLODetector
 from src.detection.anomaly_detector import AnomalyDetector
@@ -17,62 +17,18 @@ import logging
 import os
 
 # ============================================
-# CRITICAL FIX: Disable all WebRTC networking
+# SIMPLE FIX FOR STREAMLIT CLOUD
 # ============================================
-os.environ['STREAMLIT_WEBRTC_DEBUG'] = 'false'
-os.environ['WEBRTC_DEBUG'] = 'false'
+# Remove all complex monkey-patching and use simple configuration
+os.environ["STREAMLIT_WEBRTC_DEBUG"] = "false"
+os.environ["WEBRTC_DEBUG"] = "false"
 
-# Disable all WebRTC network connections
-class NoOpICEConnection:
-    """Dummy ICE connection that does nothing"""
-    def __init__(self, *args, **kwargs):
-        pass
-    
-    async def connect(self, *args, **kwargs):
-        return
-    
-    async def close(self):
-        pass
-    
-    def add_remote_candidate(self, *args, **kwargs):
-        pass
-
-# Monkey patch to disable STUN/ICE completely
-import aioice
-original_ice_connection = aioice.ice.Connection
-
-def patched_ice_connection(*args, **kwargs):
-    # Return a dummy connection that does nothing
-    return NoOpICEConnection(*args, **kwargs)
-
-aioice.ice.Connection = patched_ice_connection
-
-# Also patch the STUN module to prevent retries
-import aioice.stun
-
-original_retry = aioice.stun.Transaction.__retry
-
-def patched_retry(self):
-    """Disable STUN retry mechanism"""
-    return
-
-aioice.stun.Transaction.__retry = patched_retry
-
-# Set very aggressive logging suppression
-logging.getLogger('aioice').setLevel(logging.CRITICAL)
-logging.getLogger('asyncio').setLevel(logging.CRITICAL)
-logging.getLogger('aiortc').setLevel(logging.CRITICAL)
-logging.getLogger('av').setLevel(logging.ERROR)
-
-# Silence all WebRTC warnings
-import warnings
-warnings.filterwarnings('ignore', category=RuntimeWarning)
-warnings.filterwarnings('ignore', category=DeprecationWarning)
+# Set logging to suppress WebRTC warnings
+logging.getLogger("aioice").setLevel(logging.ERROR)
+logging.getLogger("asyncio").setLevel(logging.ERROR)
+logging.getLogger("aiortc").setLevel(logging.ERROR)
 
 # ============================================
-# END OF FIX SECTION
-# ============================================
-
 # Set page config
 st.set_page_config(
     page_title="AI Airport Security System",
@@ -357,86 +313,89 @@ with col1:
     if not st.session_state.system_status["anomaly_model_loaded"]:
         st.warning("⚠️ Anomaly model not loaded. Anomaly detection will be limited.")
 
-    # WebRTC streamer with minimal configuration
-    # Note: We're using the simplest possible configuration
+    # IMPORTANT: For Streamlit Cloud, we need to provide camera access info
+    st.info(
+        "💡 **Note for Streamlit Cloud:** Camera access requires HTTPS and user permission. Click 'START' to begin."
+    )
+
+    # WebRTC streamer with simple configuration
     try:
+        # Use minimal configuration for Streamlit Cloud
         webrtc_ctx = webrtc_streamer(
             key="airport-security",
             video_processor_factory=VideoProcessor,
-            # Complete ICE/STUN disable
+            # Minimal RTC configuration that works on Streamlit Cloud
             rtc_configuration={
-                "iceServers": [],
-                "iceTransportPolicy": "none",
-                "bundlePolicy": "max-bundle",
-                "rtcpMuxPolicy": "require"
+                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
             },
             media_stream_constraints={
-                "video": {
-                    "width": {"ideal": 640},
-                    "height": {"ideal": 480},
-                    "frameRate": {"ideal": 15}
-                },
-                "audio": False
+                "video": {"width": {"ideal": 640}, "height": {"ideal": 480}},
+                "audio": False,
             },
-            async_processing=False,  # Keep synchronous for simplicity
-            video_frame_callback=None,
         )
-        
-        # Check if webrtc_ctx is properly initialized
-        if webrtc_ctx is None:
-            st.warning("WebRTC context not initialized. Using fallback mode.")
-            webrtc_ctx = type('obj', (object,), {'state': type('obj', (object,), {'playing': False})()})()
-        
+
     except Exception as e:
-        st.error(f"WebRTC initialization error: {str(e)[:100]}")
-        # Create a dummy context to prevent crashes
-        webrtc_ctx = type('obj', (object,), {'state': type('obj', (object,), {'playing': False})()})()
+        st.error(f"Camera stream initialization error: {str(e)[:100]}")
+
+        # Create a dummy context
+        class DummyContext:
+            class State:
+                playing = False
+
+            state = State()
+
+        webrtc_ctx = DummyContext()
 
     # Display current detection info below the video
-    if hasattr(webrtc_ctx, 'state') and hasattr(webrtc_ctx.state, 'playing') and webrtc_ctx.state.playing:
-        st.session_state.system_status["camera_active"] = True
+    if hasattr(webrtc_ctx, "state") and hasattr(webrtc_ctx.state, "playing"):
+        if webrtc_ctx.state.playing:
+            st.session_state.system_status["camera_active"] = True
 
-        # Display current detection status
-        with detection_data["lock"]:
-            current_alert = detection_data["current_alert"]
-            anomaly_score = detection_data["last_anomaly_score"]
-            detections = detection_data["current_detections"]
-            frame_count = detection_data["frame_counter"]
+            # Display current detection status
+            with detection_data["lock"]:
+                current_alert = detection_data["current_alert"]
+                anomaly_score = detection_data["last_anomaly_score"]
+                detections = detection_data["current_detections"]
+                frame_count = detection_data["frame_counter"]
 
-        # Update session state stats (main thread only)
-        st.session_state.detection_stats["total_frames"] = frame_count
-        if detections:
-            st.session_state.detection_stats["objects_detected"] += len(detections)
+            # Update session state stats (main thread only)
+            st.session_state.detection_stats["total_frames"] = frame_count
+            if detections:
+                st.session_state.detection_stats["objects_detected"] += len(detections)
 
-        if current_alert and current_alert not in st.session_state.alerts:
-            st.session_state.alerts.append(current_alert)
-            st.session_state.detection_stats["anomalies_detected"] += 1
+            if current_alert and current_alert not in st.session_state.alerts:
+                st.session_state.alerts.append(current_alert)
+                st.session_state.detection_stats["anomalies_detected"] += 1
 
-        # Display current frame info
-        st.subheader("Current Frame Analysis")
-        col1a, col2a, col3a = st.columns(3)
+            # Display current frame info
+            st.subheader("Current Frame Analysis")
+            col1a, col2a, col3a = st.columns(3)
 
-        with col1a:
-            st.metric("Frame", frame_count)
+            with col1a:
+                st.metric("Frame", frame_count)
 
-        with col2a:
-            st.metric("Anomaly Score", f"{anomaly_score:.3f}")
+            with col2a:
+                st.metric("Anomaly Score", f"{anomaly_score:.3f}")
 
-        with col3a:
-            st.metric("Detections", len(detections))
+            with col3a:
+                st.metric("Detections", len(detections))
 
-        # Display detection details
-        if detections:
-            st.subheader("Detected Objects")
-            for i, detection in enumerate(detections[:5]):  # Show first 5 detections
-                st.write(
-                    f"{i+1}. **{detection['class']}** (confidence: {detection['confidence']:.2f})"
-                )
+            # Display detection details
+            if detections:
+                st.subheader("Detected Objects")
+                for i, detection in enumerate(
+                    detections[:5]
+                ):  # Show first 5 detections
+                    st.write(
+                        f"{i+1}. **{detection['class']}** (confidence: {detection['confidence']:.2f})"
+                    )
+        else:
+            st.session_state.system_status["camera_active"] = False
+            st.info(
+                "🔴 Camera feed not active. Please allow camera access and click 'START' to begin streaming."
+            )
     else:
-        st.session_state.system_status["camera_active"] = False
-        st.info(
-            "🔴 Camera feed not active. Please allow camera access and click 'START' to begin streaming."
-        )
+        st.warning("⚠️ Camera stream not available in this environment.")
 
 with col2:
     st.header("🚨 Alert Panel")
@@ -448,7 +407,7 @@ with col2:
             f"""
         <div class="alert-box">
             <h3>🚨 SECURITY ALERT</h3>
-            <p><strong>Time:</strong> {latest_alert['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}</p>
+            <p><strong>Time:</strong> {latest_alert['timestamp'].strftime('%Y-%m-d %H:%M:%S')}</p>
             <p><strong>Message:</strong> {latest_alert['message']}</p>
             <p><strong>Type:</strong> {latest_alert['type'].upper()}</p>
         </div>
@@ -576,6 +535,15 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Note: The errors you're seeing are harmless - they're just WebRTC trying to establish
-# network connections that aren't needed for local camera access.
-# The video processing and detection will still work correctly.
+# Important note about Streamlit Cloud
+st.markdown("---")
+st.info(
+    """
+    **⚠️ Important Note for Streamlit Cloud Deployment:**
+    
+    1. **Camera Access:** WebRTC camera access requires HTTPS and user permission
+    2. **STUN Errors:** The STUN connection errors in the console are normal and harmless
+    3. **Functionality:** The application will work despite these warnings
+    4. **Local Testing:** For best results, test locally first before deploying to cloud
+    """
+)
