@@ -302,9 +302,7 @@ with col1:
     webrtc_ctx = webrtc_streamer(
         key="airport-security",
         video_processor_factory=VideoProcessor,
-        rtc_configuration=RTCConfiguration(
-            {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-        ),
+        rtc_configuration=RTCConfiguration({}),
         media_stream_constraints={"video": True, "audio": False},
         desired_playing_state=True,
     )
