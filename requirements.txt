@@ -1,22 +1,22 @@
 # Core ML & Data Science
 tensorflow>=2.11.0
-opencv-python
-numpy
-pandas
-scikit-learn
-matplotlib
-seaborn
+opencv-python-headless==4.12.0.88
+numpy==2.2.6
+pandas==2.3.3
+scikit-learn==1.8.0
+matplotlib==3.10.8
+seaborn==0.13.2
 
 # Image/Video Processing
-Pillow
-imutils
+Pillow==12.0.0
+imutils==0.5.4
 
 # Model Deployment & Dashboard
-streamlit
-streamlit-webrtc  # For real-time video in Streamlit
+streamlit==1.52.1
+streamlit-webrtc==0.64.5
 
 # Utilities
-jupyter
-tqdm
-ultralytics
-plotly
+jupyter==1.1.1
+tqdm==4.67.1
+ultralytics==8.3.239
+plotly==6.5.0
