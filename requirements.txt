@@ -14,6 +14,7 @@ imutils==0.5.4
 # Model Deployment & Dashboard
 streamlit==1.52.1
 streamlit-webrtc==0.64.5
+aioice==0.10.2 
 
 # Utilities
 jupyter==1.1.1
