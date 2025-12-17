@@ -4614,11 +4614,11 @@
         "documentation": {}
     },
     {
-        "label": "use_upload",
+        "label": "webrtc_ctx",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "use_upload = st.checkbox(\"Use image upload instead of camera\", value=False)\nif use_upload:\n    uploaded_file = st.file_uploader(\"Upload an image for analysis\", type=['jpg', 'png', 'jpeg'])\n    if uploaded_file:\n        file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)\n        img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)\n        # Process the uploaded image\n        if yolo_detector:\n            results, processed_img = yolo_detector.process_frame(img)\n            current_detections = results[\"detections\"]",
+        "peekOfCode": "webrtc_ctx = webrtc_streamer(\n    key=\"airport-security\",\n    video_processor_factory=VideoProcessor,\n    mode=WebRtcMode.SENDRECV,\n    rtc_configuration={\n        \"iceServers\": [\n            {\"urls\": [\"stun:stun.l.google.com:19302\"]},\n            {\"urls\": [\"stun:stun1.l.google.com:19302\"]},\n            {\"urls\": [\"stun:stun2.l.google.com:19302\"]},\n            {\"urls\": [\"stun:stun3.l.google.com:19302\"]},",
         "detail": "app",
         "documentation": {}
     },

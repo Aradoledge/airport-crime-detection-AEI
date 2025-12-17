@@ -362,7 +362,7 @@ st.markdown(
     "Real-time monitoring of suspicious activities and potential threats in airport environments"
 )
 
-# CHANGED: Single column layout instead of two columns
+# Single column layout
 st.header("📹 Live Monitoring")
 
 if not st.session_state.system_status["yolo_loaded"]:
@@ -370,135 +370,192 @@ if not st.session_state.system_status["yolo_loaded"]:
 if not st.session_state.system_status["anomaly_model_loaded"]:
     st.warning("⚠️ Anomaly model not loaded. Anomaly detection will be limited.")
 
-# IMPORTANT: For Streamlit Cloud, we need to provide camera access info
-st.info(
-    "💡 **Note:** Camera access requires HTTPS and user permission. Click 'START' to begin."
+# REMOVED: Camera option and image upload alternative
+# Using WebRTC directly with better configuration
+
+# WebRTC streamer with optimized configuration
+webrtc_ctx = webrtc_streamer(
+    key="airport-security",
+    video_processor_factory=VideoProcessor,
+    mode=WebRtcMode.SENDRECV,
+    rtc_configuration={
+        "iceServers": [
+            {"urls": ["stun:stun.l.google.com:19302"]},
+            {"urls": ["stun:stun1.l.google.com:19302"]},
+            {"urls": ["stun:stun2.l.google.com:19302"]},
+            {"urls": ["stun:stun3.l.google.com:19302"]},
+            {"urls": ["stun:stun4.l.google.com:19302"]},
+        ]
+    },
+    media_stream_constraints={
+        "video": {
+            "width": {"ideal": 640, "min": 320, "max": 1280},
+            "height": {"ideal": 480, "min": 240, "max": 720},
+            "frameRate": {"ideal": 15, "min": 10, "max": 30},
+        },
+        "audio": False,
+    },
+    async_processing=True,
 )
 
-# Alternative: Add image upload option for environments without camera
-use_upload = st.checkbox("Use image upload instead of camera", value=False)
-
-if use_upload:
-    uploaded_file = st.file_uploader("Upload an image for analysis", type=['jpg', 'png', 'jpeg'])
-    if uploaded_file:
-        file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-        img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-        
-        # Process the uploaded image
-        if yolo_detector:
-            results, processed_img = yolo_detector.process_frame(img)
-            current_detections = results["detections"]
-            
-            with detection_data["lock"]:
-                detection_data["current_detections"] = current_detections
-                detection_data["frame_counter"] += 1
-            
-            # Display original and processed images side by side
-            col_img1, col_img2 = st.columns(2)
-            with col_img1:
-                st.image(img, channels="BGR", caption="Original Image")
-            with col_img2:
-                st.image(processed_img, channels="BGR", caption="Processed Image")
-            
-            if current_detections:
-                st.subheader("📋 Detected Objects")
-                for i, detection in enumerate(current_detections):
-                    st.write(f"{i+1}. **{detection['class']}** (confidence: {detection['confidence']:.2f})")
-        else:
-            st.image(img, channels="BGR", caption="Original Image (Detection unavailable)")
-    
-    # Create dummy context for uploaded mode
-    class DummyWebRTCContext:
-        class State:
-            playing = False
-        state = State()
-    
-    webrtc_ctWebRTCx = DummyWebRTCContext()
-    
-else:
-    # WebRTC streamer with error handling
-    try:
-        # Use minimal configuration
-        webrtc_ctx = webrtc_streamer(
-            key="video-sendonly",
-            mode=WebRtcMode.SENDONLY,
-            media_stream_constraints={"video": True},
-            # key="airport-security",
-            video_processor_factory=VideoProcessor,
-        )
-
-        
-        if webrtc_ctx is None:
-            st.warning("WebRTC context not initialized. Camera may not be available.")
-            # Create dummy context
-            class DummyContext:
-                class State:
-                    playing = False
-                state = State()
-            webrtc_ctx = DummyContext()
-            
-    except Exception as e:
-        st.warning(f"Camera stream may not be available: {str(e)[:50]}")
-        # Create dummy context
-        class DummyContext:
-            class State:
-                playing = False
-            state = State()
-        webrtc_ctx = DummyContext()
-
 # Display current detection info below the video
-if hasattr(webrtc_ctx, 'state') and hasattr(webrtc_ctx.state, 'playing'):
-    if webrtc_ctx.state.playing:
-        st.session_state.system_status["camera_active"] = True
+if webrtc_ctx and hasattr(webrtc_ctx, 'state') and webrtc_ctx.state.playing:
+    st.session_state.system_status["camera_active"] = True
 
-        # Display current detection status
-        with detection_data["lock"]:
-            current_alert = detection_data["current_alert"]
-            anomaly_score = detection_data["last_anomaly_score"]
-            detections = detection_data["current_detections"]
-            frame_count = detection_data["frame_counter"]
+    # Display current detection status
+    with detection_data["lock"]:
+        current_alert = detection_data["current_alert"]
+        anomaly_score = detection_data["last_anomaly_score"]
+        detections = detection_data["current_detections"]
+        frame_count = detection_data["frame_counter"]
 
-        # Update session state stats (main thread only)
-        st.session_state.detection_stats["total_frames"] = frame_count
-        if detections:
-            st.session_state.detection_stats["objects_detected"] += len(detections)
+    # Update session state stats (main thread only)
+    st.session_state.detection_stats["total_frames"] = frame_count
+    if detections:
+        st.session_state.detection_stats["objects_detected"] += len(detections)
 
-        if current_alert and current_alert not in st.session_state.alerts:
-            st.session_state.alerts.append(current_alert)
-            st.session_state.detection_stats["anomalies_detected"] += 1
+    if current_alert and current_alert not in st.session_state.alerts:
+        st.session_state.alerts.append(current_alert)
+        st.session_state.detection_stats["anomalies_detected"] += 1
 
-        # Display current frame info
-        st.subheader("📊 Current Frame Analysis")
-        col1a, col2a, col3a = st.columns(3)
+    # Display current frame info
+    st.subheader("📊 Current Frame Analysis")
+    col1a, col2a, col3a = st.columns(3)
 
-        with col1a:
-            st.metric("Frame", frame_count)
+    with col1a:
+        st.metric("Frame", frame_count)
 
-        with col2a:
-            st.metric("Anomaly Score", f"{anomaly_score:.3f}")
+    with col2a:
+        st.metric("Anomaly Score", f"{anomaly_score:.3f}")
 
-        with col3a:
-            st.metric("Detections", len(detections))
+    with col3a:
+        st.metric("Detections", len(detections))
 
-        # Display detection details
-        if detections:
-            st.subheader("📋 Detected Objects")
-            for i, detection in enumerate(detections[:5]):  # Show first 5 detections
-                st.write(
-                    f"{i+1}. **{detection['class']}** (confidence: {detection['confidence']:.2f})"
-                )
-    else:
-        st.session_state.system_status["camera_active"] = False
-        if not use_upload:
-            st.info(
-                "🔴 Camera feed not active. Please allow camera access and click 'START' to begin streaming."
+    # Display detection details
+    if detections:
+        st.subheader("📋 Detected Objects")
+        for i, detection in enumerate(detections[:5]):  # Show first 5 detections
+            st.write(
+                f"{i+1}. **{detection['class']}** (confidence: {detection['confidence']:.2f})"
             )
 else:
-    if not use_upload:
-        st.warning("⚠️ Camera stream may not be available in this environment.")
+    st.session_state.system_status["camera_active"] = False
+    st.info(
+        "🔴 Camera feed not active. Please allow camera access and click 'START' to begin streaming."
+    )
 
 st.markdown("---")
 
+# 🚨 Alert Panel
+st.header("🚨 Alert Panel")
+
+# Display latest alert
+if st.session_state.alerts:
+    latest_alert = list(st.session_state.alerts)[-1]  # Get last alert from deque
+    st.markdown(
+        f"""
+    <div class="alert-box">
+        <h3>🚨 SECURITY ALERT</h3>
+        <p><strong>Time:</strong> {latest_alert['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}</p>
+        <p><strong>Message:</strong> {latest_alert['message']}</p>
+        <p><strong>Type:</strong> {latest_alert['type'].upper()}</p>
+    </div>
+    """,
+        unsafe_allow_html=True,
+    )
+else:
+    st.success("✅ No active alerts")
+
+st.markdown("---")
+
+# System status
+st.subheader("📊 System Statistics")
+
+col11, col12, col13 = st.columns(3)
+
+with col11:
+    st.metric("Frames Processed", st.session_state.detection_stats["total_frames"])
+
+with col12:
+    st.metric(
+        "Alerts Triggered", st.session_state.detection_stats["anomalies_detected"]
+    )
+
+with col13:
+    st.metric(
+        "Objects Detected", st.session_state.detection_stats["objects_detected"]
+    )
+
+st.markdown("---")
+
+# Detection statistics
+st.subheader("📈 Detection Statistics")
+
+# Create simple chart
+if st.session_state.detection_stats["total_frames"] > 0:
+    fig = go.Figure()
+
+    frames = st.session_state.detection_stats["total_frames"]
+    anomalies = st.session_state.detection_stats["anomalies_detected"]
+    objects = st.session_state.detection_stats["objects_detected"]
+
+    fig.add_trace(
+        go.Bar(
+            x=["Frames", "Alerts", "Objects"],
+            y=[frames, anomalies, objects],
+            marker_color=["blue", "red", "green"],
+        )
+    )
+
+    fig.update_layout(
+        title="Detection Statistics",
+        showlegend=False,
+        height=250,
+        margin=dict(l=20, r=20, t=40, b=20),
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+# Additional sections
+st.markdown("---")
+
+# Historical data and logs
+st.header("📋 Recent Alerts")
+
+if st.session_state.alerts:
+    # Show last 5 alerts
+    recent_alerts = list(st.session_state.alerts)[-5:]
+    for alert in reversed(recent_alerts):
+        alert_time = alert["timestamp"].strftime("%H:%M:%S")
+        st.warning(f"**{alert_time}** - {alert['message']}")
+else:
+    st.info("No alerts recorded yet")
+
+st.markdown("---")
+
+# System Controls
+st.header("⚙️ System Controls")
+
+col4a, col4b = st.columns(2)
+
+with col4a:
+    if st.button("🔄 Reset Stats", use_container_width=True):
+        st.session_state.detection_stats = {
+            "total_frames": 0,
+            "anomalies_detected": 0,
+            "objects_detected": 0,
+            "last_update": time.time(),
+        }
+        st.session_state.alerts.clear()
+        st.rerun()
+
+with col4b:
+    if st.button("🗑️ Clear Alerts", use_container_width=True):
+        st.session_state.alerts.clear()
+        st.rerun()
+
+# Model information
+st.markdown("---")
 st.subheader("🧠 Model Info")
 
 if st.session_state.system_status["anomaly_model_loaded"]:
