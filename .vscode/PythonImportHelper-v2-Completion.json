@@ -662,6 +662,14 @@
         "documentation": {}
     },
     {
+        "label": "WebRtcMode",
+        "importPath": "streamlit_webrtc",
+        "description": "streamlit_webrtc",
+        "isExtraImport": true,
+        "detail": "streamlit_webrtc",
+        "documentation": {}
+    },
+    {
         "label": "av",
         "kind": 6,
         "isExtraImport": true,

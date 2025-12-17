@@ -1,7 +1,7 @@
 import streamlit as st
 import cv2
 import numpy as np
-from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode
 import av
 from src.detection.yolo_detector import YOLODetector
 from src.detection.anomaly_detector import AnomalyDetector
@@ -420,18 +420,11 @@ else:
     try:
         # Use minimal configuration
         webrtc_ctx = webrtc_streamer(
-            key="airport-security",
+            key="video-sendonly",
+            mode=WebRtcMode.SENDONLY,
+            media_stream_constraints={"video": True},
+            # key="airport-security",
             video_processor_factory=VideoProcessor,
-            rtc_configuration={
-                "iceServers": [
-                    {"urls": ["stun:stun.l.google.com:19302"]},
-                    {"urls": ["stun:stun1.l.google.com:19302"]},
-                ]
-            },
-            media_stream_constraints={
-                "video": True,
-                "audio": False,
-            },
         )
 
         
