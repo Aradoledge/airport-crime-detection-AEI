@@ -105,6 +105,14 @@
         "documentation": {}
     },
     {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
         "label": "networkx",
         "kind": 6,
         "isExtraImport": true,
@@ -191,14 +199,6 @@
     },
     {
         "label": "defaultdict",
-        "importPath": "collections",
-        "description": "collections",
-        "isExtraImport": true,
-        "detail": "collections",
-        "documentation": {}
-    },
-    {
-        "label": "deque",
         "importPath": "collections",
         "description": "collections",
         "isExtraImport": true,
@@ -588,14 +588,6 @@
         "documentation": {}
     },
     {
-        "label": "datetime",
-        "importPath": "datetime",
-        "description": "datetime",
-        "isExtraImport": true,
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
         "label": "ModelTrainer",
         "importPath": "src.models.trainer",
         "description": "src.models.trainer",
@@ -637,36 +629,37 @@
         "documentation": {}
     },
     {
-        "label": "streamlit",
+        "label": "logging",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "streamlit",
-        "description": "streamlit",
-        "detail": "streamlit",
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
         "documentation": {}
     },
     {
-        "label": "webrtc_streamer",
-        "importPath": "streamlit_webrtc",
-        "description": "streamlit_webrtc",
+        "label": "queue",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "streamlit_webrtc",
+        "importPath": "queue",
+        "description": "queue",
+        "detail": "queue",
         "documentation": {}
     },
     {
-        "label": "VideoProcessorBase",
-        "importPath": "streamlit_webrtc",
-        "description": "streamlit_webrtc",
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "detail": "streamlit_webrtc",
+        "detail": "typing",
         "documentation": {}
     },
     {
-        "label": "WebRtcMode",
-        "importPath": "streamlit_webrtc",
-        "description": "streamlit_webrtc",
+        "label": "NamedTuple",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "detail": "streamlit_webrtc",
+        "detail": "typing",
         "documentation": {}
     },
     {
@@ -679,11 +672,53 @@
         "documentation": {}
     },
     {
-        "label": "YOLODetector",
-        "importPath": "src.detection.yolo_detector",
-        "description": "src.detection.yolo_detector",
+        "label": "streamlit",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "src.detection.yolo_detector",
+        "importPath": "streamlit",
+        "description": "streamlit",
+        "detail": "streamlit",
+        "documentation": {}
+    },
+    {
+        "label": "st_session_memo",
+        "importPath": "streamlit_session_memo",
+        "description": "streamlit_session_memo",
+        "isExtraImport": true,
+        "detail": "streamlit_session_memo",
+        "documentation": {}
+    },
+    {
+        "label": "WebRtcMode",
+        "importPath": "streamlit_webrtc",
+        "description": "streamlit_webrtc",
+        "isExtraImport": true,
+        "detail": "streamlit_webrtc",
+        "documentation": {}
+    },
+    {
+        "label": "webrtc_streamer",
+        "importPath": "streamlit_webrtc",
+        "description": "streamlit_webrtc",
+        "isExtraImport": true,
+        "detail": "streamlit_webrtc",
+        "documentation": {}
+    },
+    {
+        "label": "__version__",
+        "importPath": "streamlit_webrtc",
+        "description": "streamlit_webrtc",
+        "isExtraImport": true,
+        "detail": "streamlit_webrtc",
+        "documentation": {}
+    },
+    {
+        "label": "aiortc",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "aiortc",
+        "description": "aiortc",
+        "detail": "aiortc",
         "documentation": {}
     },
     {
@@ -692,49 +727,6 @@
         "description": "src.detection.anomaly_detector",
         "isExtraImport": true,
         "detail": "src.detection.anomaly_detector",
-        "documentation": {}
-    },
-    {
-        "label": "AnomalyDetector",
-        "importPath": "src.detection.anomaly_detector",
-        "description": "src.detection.anomaly_detector",
-        "isExtraImport": true,
-        "detail": "src.detection.anomaly_detector",
-        "documentation": {}
-    },
-    {
-        "label": "plotly.graph_objects",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "plotly.graph_objects",
-        "description": "plotly.graph_objects",
-        "detail": "plotly.graph_objects",
-        "documentation": {}
-    },
-    {
-        "label": "make_subplots",
-        "importPath": "plotly.subplots",
-        "description": "plotly.subplots",
-        "isExtraImport": true,
-        "detail": "plotly.subplots",
-        "documentation": {}
-    },
-    {
-        "label": "threading",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "threading",
-        "description": "threading",
-        "detail": "threading",
-        "documentation": {}
-    },
-    {
-        "label": "logging",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "logging",
-        "description": "logging",
-        "detail": "logging",
         "documentation": {}
     },
     {
@@ -4506,110 +4498,155 @@
         "documentation": {}
     },
     {
-        "label": "VideoProcessor",
+        "label": "Detection",
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class VideoProcessor(VideoProcessorBase):\n    def __init__(self):\n        self.yolo_detector = yolo_detector\n        self.anomaly_detector = anomaly_detector\n        self.frame_count = 0\n    def recv(self, frame):\n        img = frame.to_ndarray(format=\"bgr24\")\n        self.frame_count += 1\n        # Get frame dimensions first - this is the key fix\n        h, w = img.shape[:2]",
+        "peekOfCode": "class Detection(NamedTuple):\n    class_id: int\n    label: str\n    score: float\n    box: np.ndarray\n@st.cache_resource\ndef generate_colors():\n    return np.random.uniform(0, 255, size=(len(CLASSES), 3))\nCOLORS = generate_colors()\n@st_session_memo",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "load_detectors",
+        "label": "download",
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def load_detectors():\n    \"\"\"Load detectors with error handling\"\"\"\n    try:\n        yolo_detector = YOLODetector()\n        st.session_state.system_status[\"yolo_loaded\"] = True\n    except Exception as e:\n        st.error(f\"YOLO Detector failed to load: {e}\")\n        yolo_detector = None\n    try:\n        anomaly_detector = AnomalyDetector()",
+        "peekOfCode": "def download(url: str, dst: Path):\n    if dst.exists():\n        return\n    import requests\n    r = requests.get(url, stream=True)\n    r.raise_for_status()\n    with open(dst, \"wb\") as f:\n        for chunk in r.iter_content(chunk_size=8192):\n            f.write(chunk)\ndownload(MODEL_URL, MODEL_PATH)",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "os.environ['STREAMLIT_WEBRTC_DEBUG']",
-        "kind": 5,
+        "label": "generate_colors",
+        "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "os.environ['STREAMLIT_WEBRTC_DEBUG'] = '0'\nos.environ['WEBRTC_DEBUG'] = '0'\nos.environ['PYTHONWARNINGS'] = 'ignore'\n# Set ALL logging to critical only\nlogging.getLogger('aioice').setLevel(logging.CRITICAL)\nlogging.getLogger('asyncio').setLevel(logging.CRITICAL)\nlogging.getLogger('aiortc').setLevel(logging.CRITICAL)\nlogging.getLogger('av').setLevel(logging.CRITICAL)\nlogging.getLogger('pyee').setLevel(logging.CRITICAL)\nlogging.getLogger('streamlit').setLevel(logging.ERROR)",
+        "peekOfCode": "def generate_colors():\n    return np.random.uniform(0, 255, size=(len(CLASSES), 3))\nCOLORS = generate_colors()\n@st_session_memo\ndef load_model():\n    return cv2.dnn.readNetFromCaffe(\n        str(PROTOTXT_PATH),\n        str(MODEL_PATH),\n    )\nnet = load_model()",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "os.environ['WEBRTC_DEBUG']",
-        "kind": 5,
+        "label": "load_model",
+        "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "os.environ['WEBRTC_DEBUG'] = '0'\nos.environ['PYTHONWARNINGS'] = 'ignore'\n# Set ALL logging to critical only\nlogging.getLogger('aioice').setLevel(logging.CRITICAL)\nlogging.getLogger('asyncio').setLevel(logging.CRITICAL)\nlogging.getLogger('aiortc').setLevel(logging.CRITICAL)\nlogging.getLogger('av').setLevel(logging.CRITICAL)\nlogging.getLogger('pyee').setLevel(logging.CRITICAL)\nlogging.getLogger('streamlit').setLevel(logging.ERROR)\nlogging.getLogger('streamlit_webrtc').setLevel(logging.CRITICAL)",
+        "peekOfCode": "def load_model():\n    return cv2.dnn.readNetFromCaffe(\n        str(PROTOTXT_PATH),\n        str(MODEL_PATH),\n    )\nnet = load_model()\n# ------------------------------------------------------------------\n# UI controls\n# ------------------------------------------------------------------\nscore_threshold = st.slider(",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "os.environ['PYTHONWARNINGS']",
-        "kind": 5,
+        "label": "video_frame_callback",
+        "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "os.environ['PYTHONWARNINGS'] = 'ignore'\n# Set ALL logging to critical only\nlogging.getLogger('aioice').setLevel(logging.CRITICAL)\nlogging.getLogger('asyncio').setLevel(logging.CRITICAL)\nlogging.getLogger('aiortc').setLevel(logging.CRITICAL)\nlogging.getLogger('av').setLevel(logging.CRITICAL)\nlogging.getLogger('pyee').setLevel(logging.CRITICAL)\nlogging.getLogger('streamlit').setLevel(logging.ERROR)\nlogging.getLogger('streamlit_webrtc').setLevel(logging.CRITICAL)\n# Suppress all warnings",
+        "peekOfCode": "def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:\n    image = frame.to_ndarray(format=\"bgr24\")\n    h, w = image.shape[:2]\n    blob = cv2.dnn.blobFromImage(\n        cv2.resize(image, (300, 300)),\n        scalefactor=0.007843,\n        size=(300, 300),\n        mean=(127.5, 127.5, 127.5),\n    )\n    net.setInput(blob)",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "detection_data",
+        "label": "os.environ[\"YOLO_CONFIG_DIR\"]",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "detection_data = {\n    \"current_alert\": None,\n    \"last_anomaly_score\": 0.0,\n    \"current_detections\": [],\n    \"frame_counter\": 0,\n    \"lock\": threading.Lock(),\n}\n# Initialize detectors\n@st.cache_resource\ndef load_detectors():",
+        "peekOfCode": "os.environ[\"YOLO_CONFIG_DIR\"] = \"/tmp/Ultralytics\"\nos.environ[\"TF_CPP_MIN_LOG_LEVEL\"] = \"2\"\nlogging.getLogger(\"aiortc\").setLevel(logging.ERROR)\nlogging.getLogger(\"aioice\").setLevel(logging.ERROR)\nlogging.getLogger(\"streamlit_webrtc\").setLevel(logging.ERROR)\n# ------------------------------------------------------------------\n# App config\n# ------------------------------------------------------------------\nst.set_page_config(\n    page_title=\"Reliable WebRTC Object Detection\",",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "confidence_threshold",
+        "label": "os.environ[\"TF_CPP_MIN_LOG_LEVEL\"]",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "confidence_threshold = st.sidebar.slider(\n    \"Confidence Threshold\", 0.1, 1.0, 0.5, 0.05, key=\"conf_threshold\"\n)\nanomaly_threshold = st.sidebar.slider(\n    \"Anomaly Threshold\", 0.1, 1.0, 0.7, 0.05, key=\"anomaly_threshold\"\n)\n# Alert settings\nst.sidebar.subheader(\"Alert Settings\")\nenable_audio_alerts = st.sidebar.checkbox(\n    \"Enable Audio Alerts\", value=False, key=\"audio_alerts\"",
+        "peekOfCode": "os.environ[\"TF_CPP_MIN_LOG_LEVEL\"] = \"2\"\nlogging.getLogger(\"aiortc\").setLevel(logging.ERROR)\nlogging.getLogger(\"aioice\").setLevel(logging.ERROR)\nlogging.getLogger(\"streamlit_webrtc\").setLevel(logging.ERROR)\n# ------------------------------------------------------------------\n# App config\n# ------------------------------------------------------------------\nst.set_page_config(\n    page_title=\"Reliable WebRTC Object Detection\",\n    layout=\"wide\",",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "anomaly_threshold",
+        "label": "HERE",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "anomaly_threshold = st.sidebar.slider(\n    \"Anomaly Threshold\", 0.1, 1.0, 0.7, 0.05, key=\"anomaly_threshold\"\n)\n# Alert settings\nst.sidebar.subheader(\"Alert Settings\")\nenable_audio_alerts = st.sidebar.checkbox(\n    \"Enable Audio Alerts\", value=False, key=\"audio_alerts\"\n)\nenable_visual_alerts = st.sidebar.checkbox(\n    \"Enable Visual Alerts\", value=True, key=\"visual_alerts\"",
+        "peekOfCode": "HERE = Path(__file__).parent\nMODELS_DIR = HERE / \"models\"\nMODELS_DIR.mkdir(exist_ok=True)\nMODEL_URL = (\n    \"https://github.com/robmarkcole/object-detection-app/raw/master/\"\n    \"model/MobileNetSSD_deploy.caffemodel\"\n)\nPROTOTXT_URL = (\n    \"https://github.com/robmarkcole/object-detection-app/raw/master/\"\n    \"model/MobileNetSSD_deploy.prototxt.txt\"",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "enable_audio_alerts",
+        "label": "MODELS_DIR",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "enable_audio_alerts = st.sidebar.checkbox(\n    \"Enable Audio Alerts\", value=False, key=\"audio_alerts\"\n)\nenable_visual_alerts = st.sidebar.checkbox(\n    \"Enable Visual Alerts\", value=True, key=\"visual_alerts\"\n)\n# System info\nst.sidebar.markdown(\"---\")\nst.sidebar.subheader(\"System Information\")\n# System status",
+        "peekOfCode": "MODELS_DIR = HERE / \"models\"\nMODELS_DIR.mkdir(exist_ok=True)\nMODEL_URL = (\n    \"https://github.com/robmarkcole/object-detection-app/raw/master/\"\n    \"model/MobileNetSSD_deploy.caffemodel\"\n)\nPROTOTXT_URL = (\n    \"https://github.com/robmarkcole/object-detection-app/raw/master/\"\n    \"model/MobileNetSSD_deploy.prototxt.txt\"\n)",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "enable_visual_alerts",
+        "label": "MODEL_URL",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "enable_visual_alerts = st.sidebar.checkbox(\n    \"Enable Visual Alerts\", value=True, key=\"visual_alerts\"\n)\n# System info\nst.sidebar.markdown(\"---\")\nst.sidebar.subheader(\"System Information\")\n# System status\nst.sidebar.markdown(\"#### System Status\")\nstatus_emoji = \"✅\" if st.session_state.system_status[\"yolo_loaded\"] else \"❌\"\nst.sidebar.markdown(",
+        "peekOfCode": "MODEL_URL = (\n    \"https://github.com/robmarkcole/object-detection-app/raw/master/\"\n    \"model/MobileNetSSD_deploy.caffemodel\"\n)\nPROTOTXT_URL = (\n    \"https://github.com/robmarkcole/object-detection-app/raw/master/\"\n    \"model/MobileNetSSD_deploy.prototxt.txt\"\n)\nMODEL_PATH = MODELS_DIR / \"MobileNetSSD_deploy.caffemodel\"\nPROTOTXT_PATH = MODELS_DIR / \"MobileNetSSD_deploy.prototxt.txt\"",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "status_emoji",
+        "label": "PROTOTXT_URL",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "status_emoji = \"✅\" if st.session_state.system_status[\"yolo_loaded\"] else \"❌\"\nst.sidebar.markdown(\n    f'<div class=\"status-box status-{\"normal\" if st.session_state.system_status[\"yolo_loaded\"] else \"alert\"}\">YOLO: {status_emoji} {\"Loaded\" if st.session_state.system_status[\"yolo_loaded\"] else \"Failed\"}</div>',\n    unsafe_allow_html=True,\n)\nstatus_emoji = \"✅\" if st.session_state.system_status[\"anomaly_model_loaded\"] else \"⚠️\"\nst.sidebar.markdown(\n    f'<div class=\"status-box status-{\"normal\" if st.session_state.system_status[\"anomaly_model_loaded\"] else \"warning\"}\">Anomaly Model: {status_emoji} {\"Loaded\" if st.session_state.system_status[\"anomaly_model_loaded\"] else \"Limited\"}</div>',\n    unsafe_allow_html=True,\n)",
+        "peekOfCode": "PROTOTXT_URL = (\n    \"https://github.com/robmarkcole/object-detection-app/raw/master/\"\n    \"model/MobileNetSSD_deploy.prototxt.txt\"\n)\nMODEL_PATH = MODELS_DIR / \"MobileNetSSD_deploy.caffemodel\"\nPROTOTXT_PATH = MODELS_DIR / \"MobileNetSSD_deploy.prototxt.txt\"\n# ------------------------------------------------------------------\n# Download helper\n# ------------------------------------------------------------------\ndef download(url: str, dst: Path):",
         "detail": "app",
         "documentation": {}
     },
     {
-        "label": "status_emoji",
+        "label": "MODEL_PATH",
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "status_emoji = \"✅\" if st.session_state.system_status[\"anomaly_model_loaded\"] else \"⚠️\"\nst.sidebar.markdown(\n    f'<div class=\"status-box status-{\"normal\" if st.session_state.system_status[\"anomaly_model_loaded\"] else \"warning\"}\">Anomaly Model: {status_emoji} {\"Loaded\" if st.session_state.system_status[\"anomaly_model_loaded\"] else \"Limited\"}</div>',\n    unsafe_allow_html=True,\n)\nst.sidebar.markdown(f\"**YOLO Model:** {settings.YOLO_MODEL}\")\nif hasattr(settings, \"SEQUENCE_LENGTH\"):\n    st.sidebar.markdown(f\"**Sequence Length:** {settings.SEQUENCE_LENGTH}\")\n# Main content\nst.markdown(",
+        "peekOfCode": "MODEL_PATH = MODELS_DIR / \"MobileNetSSD_deploy.caffemodel\"\nPROTOTXT_PATH = MODELS_DIR / \"MobileNetSSD_deploy.prototxt.txt\"\n# ------------------------------------------------------------------\n# Download helper\n# ------------------------------------------------------------------\ndef download(url: str, dst: Path):\n    if dst.exists():\n        return\n    import requests\n    r = requests.get(url, stream=True)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "PROTOTXT_PATH",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "PROTOTXT_PATH = MODELS_DIR / \"MobileNetSSD_deploy.prototxt.txt\"\n# ------------------------------------------------------------------\n# Download helper\n# ------------------------------------------------------------------\ndef download(url: str, dst: Path):\n    if dst.exists():\n        return\n    import requests\n    r = requests.get(url, stream=True)\n    r.raise_for_status()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "CLASSES",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "CLASSES = [\n    \"background\", \"aeroplane\", \"bicycle\", \"bird\", \"boat\", \"bottle\", \"bus\",\n    \"car\", \"cat\", \"chair\", \"cow\", \"diningtable\", \"dog\", \"horse\", \"motorbike\",\n    \"person\", \"pottedplant\", \"sheep\", \"sofa\", \"train\", \"tvmonitor\",\n]\nclass Detection(NamedTuple):\n    class_id: int\n    label: str\n    score: float\n    box: np.ndarray",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "COLORS",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "COLORS = generate_colors()\n@st_session_memo\ndef load_model():\n    return cv2.dnn.readNetFromCaffe(\n        str(PROTOTXT_PATH),\n        str(MODEL_PATH),\n    )\nnet = load_model()\n# ------------------------------------------------------------------\n# UI controls",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "net",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "net = load_model()\n# ------------------------------------------------------------------\n# UI controls\n# ------------------------------------------------------------------\nscore_threshold = st.slider(\n    \"Detection confidence threshold\",\n    0.0, 1.0, 0.5, 0.05\n)\n# Thread-safe communication queue\nresult_queue: \"queue.Queue[List[Detection]]\" = queue.Queue()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "score_threshold",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "score_threshold = st.slider(\n    \"Detection confidence threshold\",\n    0.0, 1.0, 0.5, 0.05\n)\n# Thread-safe communication queue\nresult_queue: \"queue.Queue[List[Detection]]\" = queue.Queue()\n# ------------------------------------------------------------------\n# WebRTC video callback (NO STREAMLIT CALLS HERE)\n# ------------------------------------------------------------------\ndef video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:",
         "detail": "app",
         "documentation": {}
     },
@@ -4618,7 +4655,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "webrtc_ctx = webrtc_streamer(\n    key=\"airport-security\",\n    video_processor_factory=VideoProcessor,\n    mode=WebRtcMode.SENDRECV,\n    media_stream_constraints={\"video\": True, \"audio\": False},\n    async_processing=True,\n)\n# Display current detection info below the video\nif webrtc_ctx and hasattr(webrtc_ctx, 'state') and webrtc_ctx.state.playing:\n    st.session_state.system_status[\"camera_active\"] = True",
+        "peekOfCode": "webrtc_ctx = webrtc_streamer(\n    key=\"stable-object-detection\",\n    mode=WebRtcMode.SENDRECV,\n    video_frame_callback=video_frame_callback,\n    media_stream_constraints={\"video\": True, \"audio\": False},\n    async_processing=True,\n)\n# ------------------------------------------------------------------\n# UI thread (SAFE)\n# ------------------------------------------------------------------",
         "detail": "app",
         "documentation": {}
     },
