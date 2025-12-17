@@ -4524,6 +4524,24 @@
         "documentation": {}
     },
     {
+        "label": "os.environ[\"YOLO_CONFIG_DIR\"]",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "os.environ[\"YOLO_CONFIG_DIR\"] = \"/tmp/Ultralytics\"\nos.environ[\"TF_CPP_MIN_LOG_LEVEL\"] = \"2\"\nlogging.getLogger(\"ultralytics\").setLevel(logging.ERROR)\nlogging.getLogger(\"absl\").setLevel(logging.ERROR)\nos.environ['STREAMLIT_WEBRTC_DEBUG'] = '0'\nos.environ['WEBRTC_DEBUG'] = '0'\nos.environ['PYTHONWARNINGS'] = 'ignore'\n# Set ALL logging to critical only\nlogging.getLogger('aioice').setLevel(logging.CRITICAL)\nlogging.getLogger('asyncio').setLevel(logging.CRITICAL)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "os.environ[\"TF_CPP_MIN_LOG_LEVEL\"]",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "os.environ[\"TF_CPP_MIN_LOG_LEVEL\"] = \"2\"\nlogging.getLogger(\"ultralytics\").setLevel(logging.ERROR)\nlogging.getLogger(\"absl\").setLevel(logging.ERROR)\nos.environ['STREAMLIT_WEBRTC_DEBUG'] = '0'\nos.environ['WEBRTC_DEBUG'] = '0'\nos.environ['PYTHONWARNINGS'] = 'ignore'\n# Set ALL logging to critical only\nlogging.getLogger('aioice').setLevel(logging.CRITICAL)\nlogging.getLogger('asyncio').setLevel(logging.CRITICAL)\nlogging.getLogger('aiortc').setLevel(logging.CRITICAL)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
         "label": "os.environ['STREAMLIT_WEBRTC_DEBUG']",
         "kind": 5,
         "importPath": "app",

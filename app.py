@@ -17,10 +17,11 @@ import logging
 import os
 import warnings
 
-# ============================================
-# ULTIMATE FIX FOR STREAMLIT CLOUD
-# ============================================
-# Suppress ALL warnings and errors
+
+os.environ["YOLO_CONFIG_DIR"] = "/tmp/Ultralytics"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+logging.getLogger("ultralytics").setLevel(logging.ERROR)
+logging.getLogger("absl").setLevel(logging.ERROR)
 os.environ['STREAMLIT_WEBRTC_DEBUG'] = '0'
 os.environ['WEBRTC_DEBUG'] = '0'
 os.environ['PYTHONWARNINGS'] = 'ignore'
