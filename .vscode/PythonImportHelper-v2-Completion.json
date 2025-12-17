@@ -4524,24 +4524,6 @@
         "documentation": {}
     },
     {
-        "label": "os.environ[\"YOLO_CONFIG_DIR\"]",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "os.environ[\"YOLO_CONFIG_DIR\"] = \"/tmp/Ultralytics\"\nos.environ[\"TF_CPP_MIN_LOG_LEVEL\"] = \"2\"\nlogging.getLogger(\"ultralytics\").setLevel(logging.ERROR)\nlogging.getLogger(\"absl\").setLevel(logging.ERROR)\nos.environ['STREAMLIT_WEBRTC_DEBUG'] = '0'\nos.environ['WEBRTC_DEBUG'] = '0'\nos.environ['PYTHONWARNINGS'] = 'ignore'\n# Set ALL logging to critical only\nlogging.getLogger('aioice').setLevel(logging.CRITICAL)\nlogging.getLogger('asyncio').setLevel(logging.CRITICAL)",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "os.environ[\"TF_CPP_MIN_LOG_LEVEL\"]",
-        "kind": 5,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "os.environ[\"TF_CPP_MIN_LOG_LEVEL\"] = \"2\"\nlogging.getLogger(\"ultralytics\").setLevel(logging.ERROR)\nlogging.getLogger(\"absl\").setLevel(logging.ERROR)\nos.environ['STREAMLIT_WEBRTC_DEBUG'] = '0'\nos.environ['WEBRTC_DEBUG'] = '0'\nos.environ['PYTHONWARNINGS'] = 'ignore'\n# Set ALL logging to critical only\nlogging.getLogger('aioice').setLevel(logging.CRITICAL)\nlogging.getLogger('asyncio').setLevel(logging.CRITICAL)\nlogging.getLogger('aiortc').setLevel(logging.CRITICAL)",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
         "label": "os.environ['STREAMLIT_WEBRTC_DEBUG']",
         "kind": 5,
         "importPath": "app",
@@ -4636,7 +4618,7 @@
         "kind": 5,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "webrtc_ctx = webrtc_streamer(\n    key=\"airport-security\",\n    video_processor_factory=VideoProcessor,\n    mode=WebRtcMode.SENDRECV,\n    rtc_configuration={\n        \"iceServers\": [\n            {\"urls\": [\"stun:stun.l.google.com:19302\"]},\n            {\"urls\": [\"stun:stun1.l.google.com:19302\"]},\n            {\"urls\": [\"stun:stun2.l.google.com:19302\"]},\n            {\"urls\": [\"stun:stun3.l.google.com:19302\"]},",
+        "peekOfCode": "webrtc_ctx = webrtc_streamer(\n    key=\"airport-security\",\n    video_processor_factory=VideoProcessor,\n    mode=WebRtcMode.SENDRECV,\n    media_stream_constraints={\"video\": True, \"audio\": False},\n    async_processing=True,\n)\n# Display current detection info below the video\nif webrtc_ctx and hasattr(webrtc_ctx, 'state') and webrtc_ctx.state.playing:\n    st.session_state.system_status[\"camera_active\"] = True",
         "detail": "app",
         "documentation": {}
     },

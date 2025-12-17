@@ -17,11 +17,10 @@ import logging
 import os
 import warnings
 
-
-os.environ["YOLO_CONFIG_DIR"] = "/tmp/Ultralytics"
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-logging.getLogger("ultralytics").setLevel(logging.ERROR)
-logging.getLogger("absl").setLevel(logging.ERROR)
+# ============================================
+# ULTIMATE FIX FOR STREAMLIT CLOUD
+# ============================================
+# Suppress ALL warnings and errors
 os.environ['STREAMLIT_WEBRTC_DEBUG'] = '0'
 os.environ['WEBRTC_DEBUG'] = '0'
 os.environ['PYTHONWARNINGS'] = 'ignore'
@@ -38,56 +37,6 @@ logging.getLogger('streamlit_webrtc').setLevel(logging.CRITICAL)
 # Suppress all warnings
 warnings.filterwarnings('ignore')
 warnings.simplefilter('ignore')
-
-# Monkey patch to completely disable error handling in streamlit-webrtc
-try:
-    import streamlit_webrtc.webrtc as webrtc_module
-    import streamlit_webrtc.shutdown as shutdown_module
-    
-    # Patch the stop method to prevent AttributeError
-    original_stop = webrtc_module.WebRtcStreamerContext.stop
-    
-    def patched_stop(self):
-        try:
-            if hasattr(self, '_session_shutdown_observer'):
-                if self._session_shutdown_observer is not None:
-                    try:
-                        if hasattr(self._session_shutdown_observer, '_polling_thread'):
-                            thread = self._session_shutdown_observer._polling_thread
-                            if thread is not None and hasattr(thread, 'is_alive'):
-                                if thread.is_alive():
-                                    thread.join(timeout=0.1)
-                    except:
-                        pass
-        except:
-            pass
-        # Call original stop without trying to access problematic attributes
-        try:
-            return original_stop(self)
-        except:
-            return None
-    
-    webrtc_module.WebRtcStreamerContext.stop = patched_stop
-    
-    # Patch shutdown observer
-    original_shutdown_stop = shutdown_module.SessionShutdownObserver.stop
-    
-    def patched_shutdown_stop(self):
-        try:
-            if hasattr(self, '_polling_thread'):
-                thread = self._polling_thread
-                if thread is not None and hasattr(thread, 'is_alive'):
-                    if thread.is_alive():
-                        thread.join(timeout=0.1)
-        except:
-            pass
-        return None
-    
-    shutdown_module.SessionShutdownObserver.stop = patched_shutdown_stop
-    
-except Exception as e:
-    # If patching fails, continue anyway
-    pass
 
 # ============================================
 # Set page config
@@ -371,31 +320,16 @@ if not st.session_state.system_status["yolo_loaded"]:
 if not st.session_state.system_status["anomaly_model_loaded"]:
     st.warning("⚠️ Anomaly model not loaded. Anomaly detection will be limited.")
 
-# REMOVED: Camera option and image upload alternative
-# Using WebRTC directly with better configuration
+st.info(
+    "💡 **Note:** Click 'START' to begin camera streaming. Grant camera permission when prompted."
+)
 
-# WebRTC streamer with optimized configuration
+# IMPORTANT: Using the proven WebRTC configuration from the working example
 webrtc_ctx = webrtc_streamer(
     key="airport-security",
     video_processor_factory=VideoProcessor,
     mode=WebRtcMode.SENDRECV,
-    rtc_configuration={
-        "iceServers": [
-            {"urls": ["stun:stun.l.google.com:19302"]},
-            {"urls": ["stun:stun1.l.google.com:19302"]},
-            {"urls": ["stun:stun2.l.google.com:19302"]},
-            {"urls": ["stun:stun3.l.google.com:19302"]},
-            {"urls": ["stun:stun4.l.google.com:19302"]},
-        ]
-    },
-    media_stream_constraints={
-        "video": {
-            "width": {"ideal": 640, "min": 320, "max": 1280},
-            "height": {"ideal": 480, "min": 240, "max": 720},
-            "frameRate": {"ideal": 15, "min": 10, "max": 30},
-        },
-        "audio": False,
-    },
+    media_stream_constraints={"video": True, "audio": False},
     async_processing=True,
 )
 
@@ -593,11 +527,10 @@ st.info(
     - ✅ **Object Detection:** Ready with YOLO
     - ✅ **Anomaly Detection:** Ready with CNN-LSTM
     - ⚠️ **Camera Feed:** Available (requires permission)
-    - ⚠️ **STUN Warnings:** Normal and harmless (can be ignored)
     
     **For Best Experience:**
     1. Use Google Chrome for best WebRTC support
     2. Grant camera permission when prompted
-    3. Ignore console warnings about STUN/ICE connections
+    3. The app may show STUN warnings in console (these are normal)
     """
 )
